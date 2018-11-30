@@ -44,4 +44,10 @@ public class AgentServiceImpl implements IAgentService {
 		return dao.getAllAgents();
 	}
 
+	@Transactional(readOnly=true)
+	public List<Agent> getAgentsByStatus(String status) {
+		// TODO Auto-generated method stub
+		return dao.getAgentsByStatus(status);
+	}
+
 }

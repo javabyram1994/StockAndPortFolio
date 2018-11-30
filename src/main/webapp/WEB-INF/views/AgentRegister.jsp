@@ -21,6 +21,7 @@
 <tr><td>MobileNumber :</td><td><form:input path="mobile"/></td></tr>
 <tr><td>Email :</td><td><form:input path="email"/></td></tr>
 <tr><td>Occupation :</td><td><form:input path="occupation"/></td></tr>
+<tr><td><form:hidden path="status" value="no" readonly="true" /></td></tr>
 <tr><td></td><td><input type="submit" value="Create Agent"></td></tr>
 </form:form>
 </table>

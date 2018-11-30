@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.app.model.Admin;
+import com.app.model.Agent;
 import com.app.model.Company;
 import com.app.model.Share;
 import com.app.service.IAdminService;
+import com.app.service.IAgentService;
 import com.app.service.ICompanyService;
 import com.app.service.IShareService;
 
@@ -28,6 +30,9 @@ public class AdminController {
 	
 	@Autowired
 	private IShareService shareService;
+	
+	@Autowired
+	private IAgentService agentService;
 	
 	@RequestMapping("/home")
 	public String home() {
@@ -88,9 +93,6 @@ public class AdminController {
 	}
 	
 	/*<------------------------------------------------------------------------------------------------>*/
-	
-	
-	
 	@RequestMapping("/addcompany")
 	public String saveCompany(ModelMap map) {
 		Company c=new Company();
@@ -124,6 +126,8 @@ public class AdminController {
 	public String deleteCompany(@ModelAttribute Company company,ModelMap map) {
 		companyService.deleteCompany(company.getId());
 		map.addAttribute("msg","deleted successfully");
+		List<Company> companies=companyService.getAllCompanies();
+		map.addAttribute("companies",companies);
 		return "CompanyDelete";
 	}
 	
@@ -143,12 +147,15 @@ public class AdminController {
 	@RequestMapping(value="/update",method=RequestMethod.POST)
 	public String update_Company(@ModelAttribute Company company,ModelMap map) {
 		companyService.updateCompany(company);
-		String msg="company of symbol :'"+company.getCompanyName()+"' updated successfull";
+		String msg="company  :'"+company.getCompanyName()+"' updated successfull";
 		map.addAttribute("msg",msg);
 		List<Company> companies=companyService.getAllCompanies();
 		map.addAttribute("companies",companies);
 		return "CompanyData";
 	}
+	
+	
+	
 	/*<-------------------------------------------------------------------------------------------->*/
 	@RequestMapping("/addshare")
 	public String addShare(ModelMap map) {
@@ -160,8 +167,8 @@ public class AdminController {
 	
 	@RequestMapping(value="/insertshare",method=RequestMethod.POST)
 	public String insertShare(@ModelAttribute Share share,ModelMap map) {
-		shareService.saveShare(share);
-		String msg="Share saved successfull";
+		shareService.updateShare(share);
+		String msg="Share updated successfull";
 		map.addAttribute("msg",msg);
 		List<Company> companies=companyService.getAllCompanies();
 		map.addAttribute("companies",companies);
@@ -218,6 +225,48 @@ public class AdminController {
 		return "ShareData";
 	}
 	
+/*<-------------------------------------------------------------------------------------------------->	*/
+	
+	@RequestMapping("/approvelAgents")
+	public String approvelAgent(ModelMap map) {
+		List<Agent> agents=agentService.getAgentsByStatus("no");
+		map.addAttribute("agents", agents);
+		return "ApprovalAgent";
+	}
+	
+	@RequestMapping("/acceptupdate")
+	public String acceptAgent(@RequestParam("id")Integer id,ModelMap map) {
+		Agent ac=agentService.getAgentById(id);
+		ac.setStatus("yes");
+		agentService.updateAgent(ac);
+		List<Agent> agents=agentService.getAgentsByStatus("no");
+		map.addAttribute("agents", agents);
+		return "ApprovalAgent";
+	}
+	
+	@RequestMapping("/rejectupdate")
+	public String rejectAgent(@RequestParam("id")Integer id,ModelMap map) {
+		Agent ac=agentService.getAgentById(id);
+		ac.setStatus("rejected");
+		agentService.updateAgent(ac);
+		List<Agent> agents=agentService.getAgentsByStatus("no");
+		map.addAttribute("agents", agents);
+		return "ApprovalAgent";
+	}
+	
+	@RequestMapping("/aceeptedAgents")
+	public String acceptedAgent(ModelMap map) {
+		List<Agent> agents=agentService.getAgentsByStatus("yes");
+		map.addAttribute("agents", agents);
+		return "AcceptedAgent";
+	}
+	
+	@RequestMapping("/rejectedAgents")
+	public String rejectedAgent(ModelMap map) {
+		List<Agent> agents=agentService.getAgentsByStatus("rejected");
+		map.addAttribute("agents", agents);
+		return "RejectedAgent";
+	}
 	
 	
 

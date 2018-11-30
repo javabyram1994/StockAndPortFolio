@@ -10,5 +10,5 @@ public interface IAgentDao {
 	void deleteAgent(int id);
 	Agent getAgentById(int id);
 	List<Agent> getAllAgents();
-
+	List<Agent> getAgentsByStatus(String status);
 }

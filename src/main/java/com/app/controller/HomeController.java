@@ -25,6 +25,7 @@ public class HomeController {
 	public String home() {
 		return "HomePage";
 	}
+	/*---------------------------------------------------------------------------------------------*/
 
 	//admin login
 	@RequestMapping("/adminlogin")
@@ -51,7 +52,7 @@ public class HomeController {
 		map.addAttribute("msg",msg);
 		return "AgentLogin";
 	}
-
+/*-------------------------------------------------------------------------------------------------------*/
 	//customer login
 	@RequestMapping("/customerlogin")
 	public String customerLogin() {
